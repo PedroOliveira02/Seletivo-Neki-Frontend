@@ -23,6 +23,12 @@ export const Content = styled.div`
   border-radius: 5px;
 `;
 
+export const passwordToggle = styled.div `
+  font-size: 22px;
+  cursor: pointer;
+  margin-left: -38px;
+`;
+
 export const Label = styled.label`
   font-size: 30px;
   font-weight: 600;
