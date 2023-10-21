@@ -10,12 +10,25 @@ const Login = () => {
   const { setUser } = useContext(AuthContext);
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword ] = useState(false);
+  const [rememberPassword, setRememberPassword] = useState(false)
+  //   localStorage.getItem("rememberPassword") === "true" || false
+  // );
   const [ msg, setMsg ] = useState("");
   const [ success, setSuccess ] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     document.title = "Login";
+
+    const storedLogin = localStorage.getItem("login");
+    const storedPassword = localStorage.getItem("password");
+
+    if (storedLogin && storedPassword) {
+      setLogin(storedLogin);
+      setPassword(storedPassword);
+      setRememberPassword(true);
+    }
   }, []);
 
   const handleLogin = async (e) => {
@@ -30,18 +43,31 @@ const Login = () => {
           login,
           password,
         });
-        const { token } = response.data;
-        // localStorage.setItem("id", id);
+        const { token, idUsers } = response.data;
         localStorage.setItem("token", token);
+        localStorage.setItem("idUsers", idUsers);
+        localStorage.setItem("login", login);
         setUser({
-          login,
           token,
+          idUsers,
+          login
         });
         const userObj = {
-          login,
           token,
+          idUsers,
+          login
         };
         localStorage.setItem("user", JSON.stringify(userObj));
+
+        if (rememberPassword) {
+          localStorage.setItem("login", login);
+          localStorage.setItem("password", password);
+        } else {
+          localStorage.removeItem("login");
+          localStorage.removeItem("password");
+
+        }
+
         setSuccess(true)
         setMsg("Login feito com sucesso!")
         setTimeout(() => {
@@ -57,6 +83,9 @@ const Login = () => {
     }
   }
     
+  const handleRememberPasswordChange = () => {
+    setRememberPassword(!rememberPassword);
+  };
   
   
   return (
@@ -69,12 +98,29 @@ const Login = () => {
           value={login}
           onChange={(e) => [setLogin(e.target.value), setMsg("")]}
         />
-        <Input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => [setPassword(e.target.value), setMsg("")]}
-        />
+        <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
+          <Input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            value={password}
+            onChange={(e) => [setPassword(e.target.value), setMsg("")]}
+          />
+          <C.passwordToggle onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? "👁️" : "👁️" }
+          </C.passwordToggle>
+        </div>
+        <div style={{ display: "flex", justifyContent: "end", width: "100%", marginBottom: -5 }}>
+          <div style={{display: "flex", height: 25, width: 90}}>
+          <label style={{ fontSize: 14, alignSelf: "center", marginBottom: 3 }} htmlFor="rememberPassword">
+            Salvar dados
+          </label>
+            <Input
+              type="checkbox"
+              checked={rememberPassword}
+              onChange={handleRememberPasswordChange}
+            />
+          </div>
+        </div>
         <C.labelMsg success={success}>{msg}</C.labelMsg>
         <Button Text="Entrar" onClick={handleLogin} />
         <C.LabelSignup>
