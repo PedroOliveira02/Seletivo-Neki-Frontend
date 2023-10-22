@@ -1,17 +1,27 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button2 from "../../components/Button2";
+import { default as Modal } from "../../components/Modal";
 import { AuthContext } from "../../contexts/AuthProvider";
 import api from "../../services/api";
 import * as C from "./styles";
-
 const Home = () => {
   const { logout, user } = useContext(AuthContext);
   const navigate = useNavigate();
   const idUsers = localStorage.getItem("idUsers")
   const [userSkills, setUserSkills] = useState([]);
+  const [showModal, setShowModal] = useState(false);
   const token = localStorage.getItem("token");
   const login = user.login;
+  const [openModal, setOpenModal] = useState(false)
+
+  useEffect(() => {
+    document.title = "Home";
+  }, [])
+
+  const closeSkillsModal = () => {
+    setShowModal(false);
+  };
 
   const config = {
     headers: {
@@ -23,7 +33,7 @@ const Home = () => {
     const fetchUserSkills = async () => {
       try {
         const response = await api.get(`/users/user-skills/${idUsers}`, config);
-        setUserSkills(response.data); // Atualiza o estado com as skills recebidas da API
+        setUserSkills(response.data); 
       } catch (error) {
         console.error("Erro ao buscar as skills do usuário", error);
       }
@@ -49,7 +59,7 @@ const Home = () => {
             : s
         )
       );
-      setEditMode(false); // Desativar o modo de edição após salvar
+      setEditMode(false);
     } catch (error) {
       if (newLevel < 1 || newLevel > 10) {
         alert("Insira um level entre 1 e 10!")
@@ -61,33 +71,14 @@ const Home = () => {
     setEditMode((prevMode) => !prevMode);
   };
 
-  
-
-  // const handleLevelChange = async (event, skill) => {
-
-  //   const newLevel = event.target.texteContent;
-
-  //   try {
-  //     const response = await api.put(`/user-skills/${skill.idUserSkills}`, { level: newLevel }, config)
-  //     setUserSkills((prevState) =>
-  //       prevState.map((s) => (s.idUserSkills === skill.idUserSkills ? { ...s, level: newLevel } : s))
-  //     );
-  //   } catch (error) {
-  //     console.error("Erro ao atualizar o nível da habilidade", error);
-  //   }
-  // }
-
   const handleRemoveSkill = async (skillId) => {
     try {
       alert("Skill excluída com sucesso!")
       setTimeout(() => {
         
       }, 1500);
-      // Fazer uma solicitação DELETE para remover a habilidade no servidor
-      const response = await api.delete(`/user-skills/${skillId}`, config);
       
-
-      // Atualizar o estado local para remover a habilidade
+      await api.delete(`/user-skills/${skillId}`, config);
       setUserSkills((prevState) => prevState.filter((s) => s.idUserSkills !== skillId));
       
     } catch (error) {
@@ -119,9 +110,14 @@ const Home = () => {
             
             <div style={{  
               width: 150,
-              padding: 10
+              padding: 10,
               }}>
-              Imagem
+              <img 
+                style={{ width: 120, marginLeft: 4}}
+                src={require(`../../assets/images/${skill.nome}.jpg`)}  
+                alt="Imagem Skill"
+              
+              />
             </div>
             <C.NomeBox>
               <div style={{
@@ -137,7 +133,6 @@ const Home = () => {
               </div>
               <div style={{
                 textAlign: "center",
-                // color: "grey",
                 fontSize: 17,
                 marginTop: 10
               }}>
@@ -160,7 +155,6 @@ const Home = () => {
               </div>
               <div style={{
                 textAlign: "center",
-                // color: "grey",
                 fontSize: 12,
                 marginTop: 5
               }}>
@@ -218,18 +212,20 @@ const Home = () => {
                 borderRadius: 10,
                 fontWeight: "Bold",
                 paddingTop: 2,
-                marginBottom: 5
+                marginBottom: 12
               }}>
                 Excluir
               </div>
               <div style={{ textAlign: "center", marginTop: 7}}>
               <button style={{ 
-                fontSize: 35, 
-                padding: 3,
-                paddingLeft: 7,
-                paddingRight: 7,
+                fontSize: 18, 
+                paddingTop: 8,
+                paddingBottom: 8,
+                paddingLeft: 25,
+                paddingRight: 25,
                 borderRadius: 20,
-                cursor: "pointer"
+                cursor: "pointer",
+                color: "red"
               }} 
                 onClick={() => handleRemoveSkill(skill.idUserSkills)}>
                 X
@@ -237,11 +233,6 @@ const Home = () => {
               </div>
             
           </C.ExcluirBox>
-          
-          {/* Descrição Level Excluir */}
-           
-            
-          
         </C.LargeBox>
       
       
@@ -256,19 +247,25 @@ const Home = () => {
           justifyContent: "space-between"
 
         }}>
-        <Button2 Text="Adicionar skill">
+        <Button2 Text="Adicionar skill"  onClick={() => setOpenModal(true)}>
+        
 
         </Button2>
         <Button2 Text="Cadastrar novo usuário" onClick={handleRegister}>
 
         </Button2>
         <Button2 Text="Logout" onClick={() => [logout(), navigate("/")]}>
-
+        
         </Button2>
+        
       </div>
-    
+      
+      <Modal isOpen={openModal} setModalOpen={() => setOpenModal(!openModal)}>
+        Conteúdo do modal
+      </Modal>
     </C.Content>
     </C.Container>
+    {showModal && <Modal show={showModal} onClose={closeSkillsModal} skills={userSkills} />}
    </C.Page>
   );
 };
