@@ -1,43 +1,29 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-export const Page = styled.div`
-  overflow-x: hidden;
-  height: 100vh;
-  width: 100vw;
-  
-`;
+export const StyledModal = styled.div`
 
-export const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 20px;
-`;
-
-export const Title = styled.h2`
-  margin-top: 20px;
-  font-size: 35px;
-`;
-
-export const Content = styled.div`
-  gap: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  flex-direction: column;
-  box-shadow: 0 1px 2px #0003;
   background-color: white;
   padding: 20px;
   border-radius: 5px;
-  
+  width: 850px;
+  max-height: 90%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-direction: column;
 `;
 
 export const LargeBox = styled.div`
   display: flex;
   height: 100px;
   background-color: #f0f2f5;
-  width: 1000px;
+  width: 800px;
   border: 1px solid grey;
   margin-bottom: 15px;
   margin-top: 10px;
@@ -54,7 +40,7 @@ export const NomeBox = styled.div`
 export const DescBox = styled.div`
   padding: 10px;
   border-right: 1px solid grey;
-  width: 400px;
+  width: 350px;
 `;
 
 export const LevelBox = styled.div`
@@ -63,9 +49,7 @@ export const LevelBox = styled.div`
   width: 150px;
 `;
 
-export const ExcluirBox = styled.div`
+export const AddBox = styled.div`
   padding: 10px;
   width: 150px;
 `;
-
-

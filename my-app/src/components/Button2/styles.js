@@ -11,6 +11,5 @@ export const Button2 = styled.button`
   color: white;
   font-weight: 600;
   font-size: 18px;
-  /* max-width: 350px; */
   letter-spacing: 1px;
 `;

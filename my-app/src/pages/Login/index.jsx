@@ -12,8 +12,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword ] = useState(false);
   const [rememberPassword, setRememberPassword] = useState(false)
-  //   localStorage.getItem("rememberPassword") === "true" || false
-  // );
   const [ msg, setMsg ] = useState("");
   const [ success, setSuccess ] = useState(false);
   const navigate = useNavigate();
@@ -110,8 +108,8 @@ const Login = () => {
           </C.passwordToggle>
         </div>
         <div style={{ display: "flex", justifyContent: "end", width: "100%", marginBottom: -5 }}>
-          <div style={{display: "flex", height: 25, width: 90}}>
-          <label style={{ fontSize: 14, alignSelf: "center", marginBottom: 3 }} htmlFor="rememberPassword">
+          <div style={{display: "flex", height: 21, width: 90}}>
+          <label style={{ fontSize: 11, alignSelf: "center", marginBottom: 3, marginLeft: 20, color: "#676767" }} htmlFor="rememberPassword">
             Salvar dados
           </label>
             <Input

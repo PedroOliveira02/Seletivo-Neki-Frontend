@@ -6,9 +6,6 @@ import Register from "../pages/Register";
 import { PrivateRoutes } from "./privateRoutes";
 
 const RoutesApp = () => {
-  // const { authenticated, loading } = useContext(AuthContext);
-
-
   return (
     
      
